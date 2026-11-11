@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="OrangeHRM UI Automation Suite" verbose="1">
+
+    <test name="Login Tests">
+        <classes>
+            <class name="com.orangehrm.tests.login.LoginTest"/>
+        </classes>
+    </test>
+
+    <test name="Dashboard Tests">
+        <classes>
+            <class name="com.orangehrm.tests.dashboard.DashboardTest"/>
+        </classes>
+    </test>
+
+    <test name="Navigation Tests">
+        <classes>
+            <class name="com.orangehrm.tests.navigation.NavigationTest"/>
+        </classes>
+    </test>
+
+    <test name="Admin Module Tests">
+        <classes>
+            <class name="com.orangehrm.tests.admin.AdminPageTest"/>
+        </classes>
+    </test>
+
+    <test name="PIM Module Tests">
+        <classes>
+            <class name="com.orangehrm.tests.pim.PIMPageTest"/>
+        </classes>
+    </test>
+
+    <test name="Negative Tests">
+        <classes>
+            <class name="com.orangehrm.tests.negative.NegativeTest"/>
+        </classes>
+    </test>
+
+</suite>

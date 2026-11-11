@@ -1,0 +1,48 @@
+name: OrangeHRM UI Tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: "Suite file to run"
+        required: true
+        default: "testng.xml"
+        type: choice
+        options:
+          - testng.xml
+          - smoke.xml
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false   # a failure on one browser must not cancel the other
+      matrix:
+        browser: [chrome, firefox]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      - name: Run UI tests (${{ matrix.browser }})
+        run: >
+          mvn -B clean test
+          -Dbrowser=${{ matrix.browser }}
+          -Dheadless=true
+          -Dsuite.file=${{ github.event.inputs.suite || 'testng.xml' }}
+
+      - name: Upload ExtentReport (${{ matrix.browser }})
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: extent-report-${{ matrix.browser }}
+          path: reports/ExtentReport-${{ matrix.browser }}.html
