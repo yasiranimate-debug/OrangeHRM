@@ -1,25 +1,25 @@
 package com.orangehrm.pages;
 
 import com.orangehrm.base.BasePage;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 public class NotFoundPage extends BasePage {
 
-    // Chrome renders its own native error interstitial for this route (the
-    // server answers a plain HTTP 404, not an OrangeHRM page), so the page
-    // heading is read from the browser's own DOM rather than an OrangeHRM locator.
-    private final By errorHeading = By.id("main-message");
+    // The server answers this route with an empty HTTP 404 body, so the
+    // OrangeHRM Vue app never mounts its #app root - that absence is what
+    // this page checks, rather than either browser's own native error UI
+    // (Chrome and Firefox render completely different markup for an empty
+    // error response, so asserting on either one is not portable).
+    @FindBy(id = "app")
+    private WebElement appRoot;
 
     public NotFoundPage(WebDriver driver) {
         super(driver);
     }
 
-    public boolean isErrorPageDisplayed() {
-        return isVisibleWithinTimeout(errorHeading, "browser 'page can't be found' error message");
-    }
-
-    public String getErrorHeadingText() {
-        return getText(errorHeading, "browser error heading");
+    public boolean isAppLoaded() {
+        return isDisplayed(appRoot, "OrangeHRM app root (#app)");
     }
 }

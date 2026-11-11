@@ -4,18 +4,22 @@ import com.orangehrm.base.BaseTest;
 import com.orangehrm.pages.LoginPage;
 import com.orangehrm.pages.NotFoundPage;
 import com.orangehrm.utils.AssertUtils;
+import com.orangehrm.utils.HttpStatusChecker;
 import org.testng.annotations.Test;
 
 public class NegativeTest extends BaseTest {
 
-    @Test(description = "TC_NEG_001: An invalid route shows the browser's 'page can't be found' error",
+    @Test(description = "TC_NEG_001: An invalid route returns HTTP 404 and never loads the app",
             groups = {"regression", "negative"})
     public void verifyInvalidRouteShowsErrorPage() {
+        String invalidRouteUrl = getBaseUrl().replace("/auth/login", "/does-not-exist");
+
+        AssertUtils.verifyEquals(HttpStatusChecker.getStatusCode(invalidRouteUrl), 404,
+                "HTTP status code for an invalid route");
+
         NotFoundPage notFoundPage = new NotFoundPage(getDriver());
-        notFoundPage.open(getBaseUrl().replace("/auth/login", "/does-not-exist"));
-        AssertUtils.verifyTrue(notFoundPage.isErrorPageDisplayed(), "error page is shown for an invalid route");
-        AssertUtils.verifyContains(notFoundPage.getErrorHeadingText(), "can’t be found",
-                "error heading text");
+        notFoundPage.open(invalidRouteUrl);
+        AssertUtils.verifyTrue(!notFoundPage.isAppLoaded(), "the OrangeHRM app did not load for an invalid route");
     }
 
     @Test(description = "TC_NEG_002: Opening a protected page as a guest redirects to the login page",
