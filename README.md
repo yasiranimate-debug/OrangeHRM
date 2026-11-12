@@ -44,7 +44,7 @@ logged, with a screenshot on both pass and failure.
 See `FRAMEWORK_PLAN.md` section 3 for the full structure. In short:
 
 * `src/main/java/com/orangehrm/pages` - Page Objects (Login, Dashboard, Admin, PIM, 404, Forgot Password)
-* `src/main/java/com/orangehrm/components` - Header (top bar / user dropdown) and Sidebar (main menu),
+* `src/main/java/com/orangehrm/components` -- Header (top bar / user dropdown) and Sidebar (main menu),
   shared across pages
 * `src/main/java/com/orangehrm/base` - `BasePage`: every UI action is a try/catch method that logs a
   report step
